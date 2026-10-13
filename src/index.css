@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/* Bone & Hunter design system. Components use semantic tokens only; dark mode is a token swap. */
+:root {
+  --hue: 90;
+
+  /* Primitives: don't use these in components */
+  --n-0: oklch(0.99 0.006 var(--hue));
+  --n-50: oklch(0.975 0.009 var(--hue));
+  --n-100: oklch(0.955 0.012 var(--hue));
+  --n-200: oklch(0.915 0.013 var(--hue));
+  --n-300: oklch(0.86 0.013 var(--hue));
+  --n-500: oklch(0.62 0.01 var(--hue));
+  --n-700: oklch(0.42 0.008 var(--hue));
+  --n-900: oklch(0.24 0.006 var(--hue));
+  --n-950: oklch(0.18 0.005 var(--hue));
+  --hunter-100: oklch(0.94 0.025 150);
+  --hunter-600: oklch(0.42 0.06 150);
+  --hunter-700: oklch(0.35 0.055 150);
+  --bone-200: oklch(0.9 0.055 var(--hue));
+  --bone-700: oklch(0.48 0.07 var(--hue));
+
+  /* Semantic tokens */
+  --bg-sunken: var(--n-100);
+  --bg-base: var(--n-50);
+  --bg-raised: var(--n-0);
+  --bg-hover: var(--n-100);
+  --fg-base: var(--n-950);
+  --fg-subtle: var(--n-700);
+  --fg-muted: var(--n-500);
+  --border-base: color-mix(in oklch, var(--n-950) 9%, transparent);
+  --border-strong: color-mix(in oklch, var(--n-950) 16%, transparent);
+  --edge-light: rgba(255, 255, 255, 0.9);
+  --accent: var(--hunter-600);
+  --accent-hover: var(--hunter-700);
+  --accent-fg: var(--n-0);
+  --accent-soft: var(--hunter-100);
+  --accent-soft-fg: var(--hunter-700);
+  --highlight: var(--bone-200);
+  --highlight-fg: var(--bone-700);
+  /* Added semantic token: legal deadlines that have passed. Muted brick, same lightness steps as hunter. */
+  --danger: oklch(0.5 0.13 30);
+  --danger-hover: oklch(0.44 0.12 30);
+  --danger-soft: oklch(0.94 0.03 30);
+  --danger-fg: oklch(0.45 0.12 30);
+  --scrim: color-mix(in oklch, var(--n-950) 35%, transparent);
+  --shadow-raised: 0 0 0 1px var(--border-base), 0 1px 2px color-mix(in oklch, var(--n-950) 6%, transparent),
+    0 4px 12px -4px color-mix(in oklch, var(--n-950) 8%, transparent);
+  --shadow-float: var(--shadow-raised), 0 16px 40px -12px color-mix(in oklch, var(--n-950) 18%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-sunken: oklch(0.155 0.005 var(--hue));
+    --bg-base: var(--n-950);
+    --bg-raised: oklch(0.215 0.006 var(--hue));
+    --bg-hover: oklch(0.25 0.006 var(--hue));
+    --fg-base: var(--n-50);
+    --fg-subtle: var(--n-300);
+    --fg-muted: var(--n-500);
+    --border-base: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.14);
+    --edge-light: rgba(255, 255, 255, 0.06);
+    --accent: oklch(0.72 0.08 150);
+    --accent-hover: oklch(0.78 0.08 150);
+    --accent-fg: var(--n-950);
+    --accent-soft: oklch(0.3 0.04 150);
+    --accent-soft-fg: oklch(0.85 0.06 150);
+    --highlight: oklch(0.33 0.04 var(--hue));
+    --highlight-fg: oklch(0.88 0.06 var(--hue));
+    --danger: oklch(0.7 0.12 30);
+    --danger-hover: oklch(0.76 0.12 30);
+    --danger-soft: oklch(0.3 0.05 30);
+    --danger-fg: oklch(0.82 0.08 30);
+    --scrim: rgba(0, 0, 0, 0.55);
+    --shadow-raised: 0 0 0 1px var(--border-base), 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 16px -6px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg-sunken: oklch(0.155 0.005 var(--hue));
+  --bg-base: var(--n-950);
+  --bg-raised: oklch(0.215 0.006 var(--hue));
+  --bg-hover: oklch(0.25 0.006 var(--hue));
+  --fg-base: var(--n-50);
+  --fg-subtle: var(--n-300);
+  --fg-muted: var(--n-500);
+  --border-base: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --edge-light: rgba(255, 255, 255, 0.06);
+  --accent: oklch(0.72 0.08 150);
+  --accent-hover: oklch(0.78 0.08 150);
+  --accent-fg: var(--n-950);
+  --accent-soft: oklch(0.3 0.04 150);
+  --accent-soft-fg: oklch(0.85 0.06 150);
+  --highlight: oklch(0.33 0.04 var(--hue));
+  --highlight-fg: oklch(0.88 0.06 var(--hue));
+  --danger: oklch(0.7 0.12 30);
+  --danger-hover: oklch(0.76 0.12 30);
+  --danger-soft: oklch(0.3 0.05 30);
+  --danger-fg: oklch(0.82 0.08 30);
+  --scrim: rgba(0, 0, 0, 0.55);
+  --shadow-raised: 0 0 0 1px var(--border-base), 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 16px -6px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+/* Tailwind names that read like the system: bg-raised, text-fg-subtle, bg-accent, … */
+@theme inline {
+  --font-serif: "Newsreader", ui-serif, Georgia, serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --color-sunken: var(--bg-sunken);
+  --color-base: var(--bg-base);
+  --color-raised: var(--bg-raised);
+  --color-hover: var(--bg-hover);
+  --color-fg: var(--fg-base);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-fg-muted: var(--fg-muted);
+  --color-line: var(--border-base);
+  --color-line-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-fg: var(--accent-soft-fg);
+  --color-highlight: var(--highlight);
+  --color-highlight-fg: var(--highlight-fg);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-fg: var(--danger-fg);
+  --color-scrim: var(--scrim);
+  --shadow-card: var(--shadow-raised), inset 0 1px 0 var(--edge-light);
+  --shadow-pop: var(--shadow-float), inset 0 1px 0 var(--edge-light);
+  --radius-sm: 6px;
+  --radius-md: 7px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  background: var(--bg-base);
+  color: var(--fg-base);
+  font: 14px/1.55 var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+h1,
+h2 {
+  text-wrap: balance;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,32 @@
+name: Feedback on the demo
+description: Tell us what worked, what didn't, and what's missing.
+title: "Feedback: "
+labels: [feedback]
+body:
+  - type: dropdown
+    id: role
+    attributes:
+      label: Your role
+      options:
+        - Special ed coordinator / program specialist
+        - Special ed director / SELPA
+        - Case manager / teacher
+        - School psychologist / therapist
+        - Parent
+        - Other
+  - type: textarea
+    id: dates
+    attributes:
+      label: Do the deadlines look right?
+      description: If a date looks wrong, tell us which student and what you'd expect.
+  - type: textarea
+    id: confusing
+    attributes:
+      label: What was confusing or got in your way?
+  - type: textarea
+    id: missing
+    attributes:
+      label: What would you need before using this for real?
+  - type: markdown
+    attributes:
+      value: "Please don't include real student information. The demo uses fictional students only."
