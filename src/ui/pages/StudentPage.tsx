@@ -1,20 +1,26 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { RULES_BY_ID, type ClockId } from "../../rules/ca-rules";
 import { isOpen, type ClockResult } from "../../rules/engine";
 import { download, studentTimelineCsv, studentTimelinePdf } from "../../audit/export";
 import { useStore } from "../../store/store";
 import { DATE_FIELDS, EXCEPTION_LABELS, type ExceptionKind, type StudentDateField } from "../../types";
-import { Badge, Button, Card, DateText, DaysLeft, Field, inputCls, Modal, PageHeader, StatusBadge, Working } from "../components";
+import { Badge, Button, Card, cx, DateText, DaysLeft, Field, inputCls, Modal, PageHeader, StatusBadge, Working } from "../components";
 import { useDerived } from "../useDerived";
 import { MEETING_TYPE_LABELS } from "../../agent/model";
+import { EVAL_STEPS, stageOf, studentStage } from "../../agent/stages";
+
 
 export function StudentPage() {
   const { id = "" } = useParams();
-  const { snapshot, byId } = useDerived();
+  const { snapshot, byId, today, atRisk } = useDerived();
+  const trackerLoaded = atRisk.trackerLoaded;
   const s = byId.get(id);
   const audit = useStore((st) => st.audit);
-  const meetings = useStore((st) => st.meetings.filter((m) => m.studentId === id));
+  // Select the stable array and filter outside the selector; a selector that
+  // returns a new array on every call makes React re-render forever.
+  const allMeetings = useStore((st) => st.meetings);
+  const meetings = useMemo(() => allMeetings.filter((m) => m.studentId === id), [allMeetings, id]);
   const district = useStore((st) => st.profile.district);
   const editDate = useStore((st) => st.editDate);
   const updateStudent = (patch: Record<string, string>) =>
@@ -27,6 +33,7 @@ export function StudentPage() {
   if (!s) return <p className="text-fg-muted">Student not found.</p>;
   const clocks = snapshot.byStudent.get(id) ?? [];
   const entries = audit.filter((e) => e.studentId === id);
+  const stage = studentStage(s, clocks, meetings, today, { trackerLoaded });
 
   return (
     <div>
@@ -56,6 +63,7 @@ export function StudentPage() {
           </div>
         }
       />
+      <StageStepper stage={stage.stage} daysInStage={stage.daysInStage} />
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <div className="space-y-4">
           {clocks.length === 0 && <p className="text-sm text-fg-muted">No clocks apply yet. Add a referral, consent or IEP date.</p>}
@@ -267,3 +275,36 @@ function ExceptionModal({ r, studentId, onClose }: { r: ClockResult | null; stud
   );
 }
 
+
+/** Where this student is in the IEP process. */
+function StageStepper({ stage, daysInStage }: { stage: ReturnType<typeof studentStage>["stage"]; daysInStage?: number }) {
+  const current = stageOf(stage);
+  // Off-path stages (review due, needs info) sit after an active IEP.
+  const steps = EVAL_STEPS.includes(stage) ? EVAL_STEPS : [...EVAL_STEPS.slice(0, -1), "active" as const, stage];
+  const at = steps.indexOf(stage);
+  return (
+    <nav aria-label="Process stage" className="mb-6">
+      <ol className="flex flex-wrap items-center gap-1.5 text-xs">
+        {steps.map((id, i) => (
+          <li
+            key={id}
+            aria-current={i === at ? "step" : undefined}
+            className={cx(
+              "rounded-full px-3 py-1",
+              i === at ? "bg-raised font-medium text-fg shadow-card" : i < at ? "bg-accent-soft text-accent-soft-fg" : "bg-sunken text-fg-muted",
+            )}
+          >
+            {stageOf(id).label}
+          </li>
+        ))}
+      </ol>
+      <p className="mt-2 text-xs text-fg-muted">
+        {current.hint}
+        {daysInStage !== undefined && ` · ${daysInStage} days in this stage`} ·{" "}
+        <Link className="text-accent hover:underline" to="/process">
+          See everyone
+        </Link>
+      </p>
+    </nav>
+  );
+}
