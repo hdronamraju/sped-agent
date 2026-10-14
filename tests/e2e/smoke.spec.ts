@@ -17,6 +17,12 @@ test("sample district: at-risk list, then a full scheduling round trip in Spanis
   await page.getByRole("button", { name: /Ava Johnson.*Assessment plan/ }).click();
   await expect(page.getByText("Cal. Educ. Code § 56321(a)").first()).toBeVisible();
 
+  // Process board: Sofia is assessing, Leo is with his family, Ava is referred.
+  await page.getByRole("link", { name: "Process" }).click();
+  await expect(page.getByRole("region", { name: "Assessing" }).getByTestId("card-1002")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Plan with family" }).getByTestId("card-1001")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Referred" }).getByTestId("card-1004")).toBeVisible();
+
   // P0-5: the queue. Start scheduling Sofia's initial IEP.
   await page.getByRole("link", { name: /^Today/ }).click();
   const row = page.locator("li", { hasText: "Hold initial IEP meeting" }).filter({ hasText: "Sofia Hernandez" });
@@ -25,6 +31,14 @@ test("sample district: at-risk list, then a full scheduling round trip in Spanis
   // P1-3: required attendees with an interpreter.
   await expect(page.getByRole("paragraph").filter({ hasText: "Ana Gómez" })).toBeVisible();
   await expect(page.getByText(/Parent's language is Spanish/)).toBeVisible();
+
+  // Once a meeting is being booked, she moves on the board.
+  await page.getByRole("link", { name: "Process" }).click();
+  await expect(page.getByRole("region", { name: "Meeting being scheduled" }).getByTestId("card-1002")).toBeVisible();
+  await page.getByTestId("card-1002").click();
+  await expect(page.getByRole("navigation", { name: "Process stage" }).getByText("Meeting being scheduled")).toHaveAttribute("aria-current", "step");
+  await page.goBack();
+  await page.goBack();
 
   // P1-5: three times; P1-6: Spanish message needs approval.
   await page.getByRole("button", { name: "Find 3 times" }).click();

@@ -5,6 +5,7 @@ import { cx } from "./components";
 import { useDerived } from "./useDerived";
 import { TodayPage } from "./pages/TodayPage";
 import { AtRiskPage } from "./pages/AtRiskPage";
+import { ProcessPage } from "./pages/ProcessPage";
 import { StudentsPage } from "./pages/StudentsPage";
 import { StudentPage } from "./pages/StudentPage";
 import { MeetingPage } from "./pages/MeetingPage";
@@ -47,6 +48,7 @@ function Shell() {
   const nav = [
     { to: "/today", label: "Today", count: queue.filter((q) => q.severity !== "upcoming").length },
     { to: "/at-risk", label: "At risk", count: atRisk.overdue.length, tone: "red" },
+    { to: "/process", label: "Process" },
     { to: "/meetings", label: "Meetings", count: approvals, tone: "amber", countLabel: "to approve" },
     { to: "/students", label: "Students" },
     { to: "/director", label: "Director view" },
@@ -89,6 +91,7 @@ function Shell() {
           <Route path="/" element={<Navigate to="/today" replace />} />
           <Route path="/today" element={<TodayPage />} />
           <Route path="/at-risk" element={<AtRiskPage />} />
+          <Route path="/process" element={<ProcessPage />} />
           <Route path="/students" element={<StudentsPage />} />
           <Route path="/students/:id" element={<StudentPage />} />
           <Route path="/meetings" element={<MeetingsPage />} />

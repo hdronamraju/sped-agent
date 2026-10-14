@@ -29,6 +29,10 @@ Two r/specialed threads (a parent of a 5-year-old with a speech-only IEP and a n
 
 The deadline rules the app implements live in `src/rules/ca-rules.ts`, and the readings that still need legal review are listed in the main [README](../../README.md#california-rules-and-interpretations-to-review). These research files explain *why* those deadlines matter and who cares about them; they don't change the rules.
 
+## Proposals built on this research
+
+- [Update the deadline table (Oct 2026)](../proposals/2026-10-deadline-table.md): citation fixes, seven new clocks, and the CALPADS certification date.
+
 ## Open questions
 
 - Get the full list of district annual determinations and monitoring tiers through a California Public Records Act request to CDE (see [05](05-public-data-sources.md)).
